@@ -1,3 +1,4 @@
+
 using WebChatServer.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,6 +6,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSignalR();//
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.WithOrigins("https://localhost:7108")
+                .AllowAnyHeader()
+                .WithMethods("GET", "POST")
+                .SetIsOriginAllowed((host) => true)
+                .AllowCredentials();
+        });
+});
 
 var app = builder.Build();
 
@@ -16,18 +30,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-        builder =>
-        {
-            builder.WithOrigins("http://localhost:5500")
-                .AllowAnyHeader()
-                .WithMethods("GET", "POST")
-                .SetIsOriginAllowed((host)=>true)
-                .AllowCredentials();
-        });
-});
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

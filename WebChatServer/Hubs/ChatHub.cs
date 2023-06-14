@@ -21,7 +21,7 @@ namespace WebChatServer.Hubs
 
 
 
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            await Clients.Others.SendAsync("ReceiveMessage", user, message);
         }
     }
 }
